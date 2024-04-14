@@ -1,0 +1,23 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="stesting_selenium">
+    <test name="testng_Test">
+        <classes>
+            <class name="runner.RunnerTest">
+                <methods>
+                    <include name="testLoginOK()"/>
+                    <exclude name="testLoginKO()"/>
+                </methods>
+
+            </class>
+
+            <!--            <class name="com.bdd.runner.AdminSuite">-->
+            <!--                <methods>-->
+            <!--                    <exclude name="miCuartoTest()"/>-->
+            <!--                    <exclude name="miQuintoTest()"/>-->
+            <!--                    <exclude name="miTercerTest()"/>-->
+            <!--                </methods>-->
+
+            <!--            </class>-->
+        </classes>
+    </test>
+</suite>

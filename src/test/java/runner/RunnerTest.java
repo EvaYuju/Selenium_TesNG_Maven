@@ -1,8 +1,8 @@
 package runner;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -16,7 +16,7 @@ public class RunnerTest {
         // Devuelve navegador vacio
         driver = WebDriverConfig.createBrowser();
         // Llama a WebDriverConfig.openUrl que obtiene la dirección para darsela al driver
-        driver = WebDriverConfig.openUrl(driver);
+        WebDriverConfig.openUrl(driver);
     }
     @AfterMethod
     public static void tearDown(){
@@ -43,12 +43,8 @@ public class RunnerTest {
         driver.findElement(By.id("btn-login")).click();
         Thread.sleep(3000);
 
-        try {
-            driver.findElement(By.id("btn-book-appointment")).isDisplayed();
-            System.out.println("LOGIN OK");
-        } catch (NoSuchElementException e) {
-            System.out.println("ERROR EN LOGIN");
-        }
+        // Validación: si es True que existe el elemento por id + maneja la excepción
+        Assert.assertTrue(driver.findElement(By.id("btn-book-appointment")).isDisplayed());
 
     }
     @Test(priority = 2, description = "Test 2 - login KO")
@@ -73,12 +69,9 @@ public class RunnerTest {
         driver.findElement(By.id("btn-login")).click();
         Thread.sleep(3000);
 
-        try {
-            driver.findElement(By.id("btn-book-appointment")).isDisplayed();
-            System.out.println("LOGIN OK");
-        } catch (NoSuchElementException e) {
-            System.out.println("ERROR EN LOGIN");
-        }
+        // Validacion By XPath si no aparece es que no hemos pasado el login
+        String txt = driver.findElement(By.xpath("//p[contains(text(),'Login failed')]")).getText();
+        Assert.assertTrue(txt.contains("Please ensure the username and password are valid"));
     }
 
 }
