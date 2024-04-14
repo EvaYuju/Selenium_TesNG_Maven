@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-
+    <!--Dependencia para Selenium-->
     <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
     <dependency>
         <groupId>org.seleniumhq.selenium</groupId>
@@ -22,6 +22,7 @@
         <version>3.141.59</version>
     </dependency>
 
+    <!--Dependencia para libreria de Boni García-->
     <!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
     <dependency>
         <groupId>io.github.bonigarcia</groupId>
@@ -29,6 +30,7 @@
         <version>5.8.0</version>
     </dependency>
 
+    <!--Dependencia para TestNG-->
     <!-- https://mvnrepository.com/artifact/org.testng/testng -->
     <dependency>
         <groupId>org.testng</groupId>
