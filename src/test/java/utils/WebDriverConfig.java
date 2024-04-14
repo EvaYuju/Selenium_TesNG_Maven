@@ -6,8 +6,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
-
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class WebDriverConfig {
@@ -49,7 +47,7 @@ public class WebDriverConfig {
     }
 
     // Función que lee un archivo de propiedades y elige el navegador determinado en él
-    public static WebDriver createBrowser() throws IOException {
+    public static WebDriver createBrowser() {
 
         // Leemos la propiedad "browser" e inicializamos el driver vacio
         String browser = Util.readProperty("browser");
@@ -62,15 +60,14 @@ public class WebDriverConfig {
         if (browser.equalsIgnoreCase("edge")) {
             driver = createEdgeDriver();
         } else {
-            // Excepción indicando que el navegador no es compatible
-            throw new IllegalArgumentException("Navegador no compatible: " + browser);
+            // Error o lanzar chrome
         }
 
         return driver;
     }
 
     // Función para abrir url de archivo properties
-    public static WebDriver openUrl(WebDriver driver) throws IOException {
+    public static WebDriver openUrl(WebDriver driver) {
         driver.get(Util.readProperty("url"));
         return driver;
     }

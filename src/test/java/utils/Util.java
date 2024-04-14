@@ -1,12 +1,11 @@
 package utils;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Properties;
 
 // Para leer propiedades en config.properties
 public class Util {
-    public static String readProperty(String key) throws IOException {
+    public static String readProperty(String key) {
 
         // Archivo a leer
         String path = System.getProperty("user.dir") +"/src/main/resources/config.properties";
@@ -16,10 +15,10 @@ public class Util {
         try {
             FileInputStream input = new FileInputStream(path);
             properties.load(input);
-            return properties.getProperty(key);
-        } catch (IOException e) {
-            System.err.println("Error al leer el archivo de propiedades: " + e.getMessage());
-            throw e;
+        } catch(Exception e){
+            e.printStackTrace();
         }
+        return properties.getProperty(key);
+
     }
 }

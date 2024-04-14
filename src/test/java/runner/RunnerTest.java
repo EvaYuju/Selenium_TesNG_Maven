@@ -5,12 +5,16 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import utils.WebDriverConfig;
 
-import java.io.IOException;
-
 // Clase main
 public class RunnerTest {
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
 
+        testLoginOK();
+        testLoginKO();
+
+       }
+
+    public static void testLoginOK() throws InterruptedException {
         //*** PRIMER TEST LOGIN OK ***
         // Devuelve navegador vacio
         WebDriver driver = WebDriverConfig.createBrowser();
@@ -45,9 +49,11 @@ public class RunnerTest {
         // Llamada a Webdriverconfig.tearDown para cerrar el navegador
         WebDriverConfig.tearDown(driver);
 
+    }
+    public static void testLoginKO() throws InterruptedException {
         //*** SEGUNDO TEST LOGIN KO ***
         // Devuelve navegador vacio
-        driver = WebDriverConfig.createBrowser();
+        WebDriver driver = WebDriverConfig.createBrowser();
         // Llama a WebDriverConfig.openUrl que obtiene la dirección para darsela al driver
         WebDriverConfig.openUrl(driver);
         System.out.println("Test Login KO");
@@ -76,5 +82,6 @@ public class RunnerTest {
 
         // Llamada a Webdriverconfig.tearDown para cerrar el navegador
         WebDriverConfig.tearDown(driver);
+
     }
 }
