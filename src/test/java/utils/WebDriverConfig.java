@@ -1,5 +1,6 @@
 package utils;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -7,23 +8,32 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class WebDriverConfig {
-    // Método driver local chrome
-    public static ChromeDriver createChromeDriver() {
+    // Método con driverManager de boni Garcia
+    public static ChromeDriver createChromeDriverBoniGarcia() {
 
-        String driverPath = System.getProperty("user.dir") + "/driver/chromedriver.exe";
-        System.setProperty("webdriver.chrome.driver", driverPath);
+        // Limpiamos caché para evitar errores
+        WebDriverManager.chromedriver().clearDriverCache();
+        // Instala el driver correspondiente a nuestra version de chrome con la libreria de B.Garcia
+        WebDriverManager.chromedriver().setup();
 
-        // Con argumentos
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--incognito");
         options.addArguments("start-maximized");
         //options.addArguments("--headless");
-        //options.addArguments("window-size=500,600");
+        // options.addArguments("window-size=500,600");
 
-        return new ChromeDriver(options);
+        ChromeDriver driver = new ChromeDriver(options);
+
+        // Waits config - poner siempre - tiempo que tarda el driver
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+        return driver;
     }
+    // Método driver local chrome
+    // Eliminado sustituido por createChromeDriverBoniGarcia
 
     // Método driver local Edge
     public static EdgeDriver createEdgeDriver() {
@@ -35,7 +45,6 @@ public class WebDriverConfig {
         //optionsEdge.(...)
         EdgeDriver driver = new EdgeDriver(optionsEdge);
 
-        //driver.get("https://katalon-demo-cura.herokuapp.com/");
         return driver;
     }
 
@@ -48,12 +57,13 @@ public class WebDriverConfig {
 
         // Según que browser tengamos en properties llamará a la función correspondiente
         if (browser.equalsIgnoreCase("chrome")) { // * Ignoramos Case para evitar errores
-            driver = createChromeDriver();
+            driver = createChromeDriverBoniGarcia();
         }
         if (browser.equalsIgnoreCase("edge")) {
             driver = createEdgeDriver();
         } else {
-            //error o lanzar chrome
+            // Excepción indicando que el navegador no es compatible
+            throw new IllegalArgumentException("Navegador no compatible: " + browser);
         }
 
         return driver;
