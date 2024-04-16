@@ -60,18 +60,27 @@ public class RunnerTest {
 
         driver.findElement(By.id("btn-make-appointment")).click();
 
+        // Cogemos valores del atributo
+        String user = driver.findElement(By.xpath("//input[@aria-describedby='demo_username_label']")).getAttribute("value");
+        String password = driver.findElement(By.xpath("//input[@aria-describedby='demo_password_label']")).getAttribute("value");
+        // Comprobamos
+        Assert.assertEquals(driver.findElement(By.xpath("//label[@for='txt-username']")).getText(),"Username");
+        driver.findElement(By.xpath("//label[@for='txt-username']"));
+
         driver.findElement(By.id("txt-username")).clear();
-        driver.findElement(By.id("txt-username")).sendKeys("John Doe");
+        driver.findElement(By.id("txt-username")).sendKeys(user);
 
         driver.findElement(By.id("txt-password")).clear();
-        driver.findElement(By.id("txt-password")).sendKeys("FAILPASSWORD");
+        driver.findElement(By.id("txt-password")).sendKeys(password);
 
         driver.findElement(By.id("btn-login")).click();
         Thread.sleep(3000);
-
-        // Validacion By XPath si no aparece es que no hemos pasado el login
-        String txt = driver.findElement(By.xpath("//p[contains(text(),'Login failed')]")).getText();
-        Assert.assertTrue(txt.contains("Please ensure the username and password are valid"));
+    }
+    @Test(priority = 1, description = "Test 3 - Book Appointment")
+    public static void testBookAppintment() throws InterruptedException {
+        testLoginOK();
+        // Codigo para rellenar el formulario
+        // video_MakeApp min 18:50
     }
 
 }

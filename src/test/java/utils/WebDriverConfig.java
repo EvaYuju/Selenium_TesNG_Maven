@@ -57,10 +57,12 @@ public class WebDriverConfig {
         if (browser.equalsIgnoreCase("chrome")) { // * Ignoramos Case para evitar errores
             driver = createChromeDriverBoniGarcia();
         }
-        if (browser.equalsIgnoreCase("edge")) {
+        else if (browser.equalsIgnoreCase("edge")) {
             driver = createEdgeDriver();
         } else {
-            // Error o lanzar chrome
+        // Manejar el caso en el que el navegador no sea ni "chrome" ni "edge"
+            System.out.println("Navegador no compatible. Iniciando Chrome por defecto...");
+            driver = createChromeDriverBoniGarcia(); // Inicia Chrome por defecto o puedes lanzar una excepción
         }
 
         return driver;
