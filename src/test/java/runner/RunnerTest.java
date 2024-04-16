@@ -1,20 +1,12 @@
 package runner;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pageObjects.LoginPage;
+import pageObjects.MakeAppointment;
 import utils.WebDriverConfig;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 // Clase main
 public class RunnerTest {
@@ -34,81 +26,65 @@ public class RunnerTest {
 
     @Test(priority = 1, description = "Test 1 - login OK")
     public static void testLoginOK() throws InterruptedException {
-        //*** PRIMER TEST LOGIN OK ***
-        driver.findElement(By.id("btn-make-appointment")).click();
-        Thread.sleep(3000);
-        String user = driver.findElement(By.xpath("//input[@aria-describedby='demo_username_label']")).getAttribute("value");
-        String password = driver.findElement(By.xpath("//input[@aria-describedby='demo_password_label']")).getAttribute("value");
+        // Creamos el objeto LoginPage
+        LoginPage loginPage = new LoginPage();
+        loginPage.goToHome(driver);
 
-        driver.findElement(By.id("btn-make-appointment")).click();
+        // Opción 1
+        // LLamamos al objeto y le pasamos el driver
+        //loginPage.doLogin(driver);
+        // Opción 2
+        loginPage.setUsername(driver);
+        loginPage.setPassword(driver);
+        loginPage.clickLogin(driver);
+        // Opción 3 - Más resumido en un método en vez de en test
+        // loginPage.doLogin2(driver);
 
-        driver.findElement(By.id("txt-username")).clear();
-        driver.findElement(By.id("txt-username")).sendKeys(user);
-
-        driver.findElement(By.id("txt-password")).clear();
-        driver.findElement(By.id("txt-password")).sendKeys(password);
-
-        driver.findElement(By.id("btn-login")).click();
-        Thread.sleep(3000);
-
-        // Validación: si es True que existe el elemento por id + maneja la excepción
-        Assert.assertTrue(driver.findElement(By.id("btn-book-appointment")).isDisplayed());
+        loginPage.validationOK(driver);
 
     }
     @Test(priority = 2, description = "Test 2 - login KO")
     public static void testLoginKO() throws InterruptedException {
-        //*** SEGUNDO TEST LOGIN KO ***
-        // Devuelve navegador vacio
-        WebDriver driver = WebDriverConfig.createBrowser();
-        // Llama a WebDriverConfig.openUrl que obtiene la dirección para darsela al driver
-        WebDriverConfig.openUrl(driver);
 
-        driver.findElement(By.id("btn-make-appointment")).click();
-        Thread.sleep(3000);
-
-        driver.findElement(By.id("btn-make-appointment")).click();
-
-        // Cogemos valores del atributo
-        String user = driver.findElement(By.xpath("//input[@aria-describedby='demo_username_label']")).getAttribute("value");
-        String password = driver.findElement(By.xpath("//input[@aria-describedby='demo_password_label']")).getAttribute("value");
-        // Comprobamos
-        Assert.assertEquals(driver.findElement(By.xpath("//label[@for='txt-username']")).getText(),"Username");
-        driver.findElement(By.xpath("//label[@for='txt-username']"));
-
-        driver.findElement(By.id("txt-username")).clear();
-        driver.findElement(By.id("txt-username")).sendKeys(user);
-
-        driver.findElement(By.id("txt-password")).clear();
-        driver.findElement(By.id("txt-password")).sendKeys(password);
-
-        driver.findElement(By.id("btn-login")).click();
-        Thread.sleep(3000);
+        LoginPage loginPage = new LoginPage();
+        loginPage.goToHome(driver);
+        loginPage.setUsername(driver);
+        loginPage.setPasswordKO(driver);
+        loginPage.clickLogin(driver);
+        loginPage.validationKO(driver);
     }
+
     @Test(priority = 1, description = "Test 3 - Book Appointment")
-    public static void testBookAppintment() throws InterruptedException {
-        testLoginOK();
-        // Codigo para rellenar el formulario
-        // video_MakeApp min 18:50
+    public static void testBookAppointmentWaits() throws InterruptedException {
+
+        testLoginOK(); // LoginPage loginPage = new LoginPage(); para separar los test por si uno falla
+        MakeAppointment makeAppointment = new MakeAppointment();
+        Thread.sleep(2000);
+        makeAppointment.setFacility(driver);
+        makeAppointment.checkHospital(driver);
+        makeAppointment.setDate(driver);
+        makeAppointment.setComment(driver);
+        makeAppointment.bookMakeAppointment(driver);
+
     }
+    /*  Como estaba antes el método de pasarlo a MakeApoinment.java
+    @Test(priority = 1, description = "Test 3 - Book Appointment")
+    public static void testBookAppointmentWaits() throws InterruptedException {
 
-    @Test(priority = 1, description = "Test 4 - Book Appointment")
-    public static void testBookAppintmentWaits() throws InterruptedException {
-        testLoginOK();
+        testLoginOK(); // LoginPage loginPage = new LoginPage(); para separar los test por si uno falla
 
-        // * AÑADIENDO ESPERAS
+        // *** AÑADIENDO ESPERAS ***
         // Opción 1
         new WebDriverWait(driver, 15).until(ExpectedConditions.elementToBeClickable(By.xpath("")));
         driver.findElement((By.id("xxx"))).click();
-        //Opción 2
+
+        // Opción 2
         WebElement element = new WebDriverWait(driver, 15).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("xx"))));
         element.click();
-
-        //Opción 3
+        // Opción 3
         new WebDriverWait(driver, 15).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("xx")))).click();
 
         Thread.sleep(2000);
-
-        driver.findElement(By.xpath("xx")).click();
 
         driver.findElement(By.xpath("(//option[@value])[1]")).click();
 
@@ -116,7 +92,6 @@ public class RunnerTest {
         // funcion random que devuelve valor entre 0-2
         int random = 2;
         driver.findElement(By.xpath("(//option[@value])"+"["+Integer.toString(random)+"]")).click();
-
 
         Select select = new Select(driver.findElement(By.id("combo_facility")));
         select.selectByIndex(1);
@@ -130,7 +105,6 @@ public class RunnerTest {
         {
             driver.findElement(By.xpath("//*[@id='chk_hospotal_readmission']")).click();
         }
-
         Date fechaActual = new Date();
         // Define el formato de fecha deseado
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
@@ -149,6 +123,7 @@ public class RunnerTest {
 
         System.out.println();
 
-    }
+    } */
+
 
 }
