@@ -25,9 +25,8 @@ public class WebDriverConfig {
 
         ChromeDriver driver = new ChromeDriver(options);
 
-        // Waits config - poner siempre - tiempo que tarda el driver
+        // Waits config - tiempo que tarda el driver - poner siempre en el arranque del driver
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
         return driver;
     }
     // Método driver local chrome
@@ -43,6 +42,7 @@ public class WebDriverConfig {
         //optionsEdge.(...)
         EdgeDriver driver = new EdgeDriver(optionsEdge);
 
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         return driver;
     }
 
