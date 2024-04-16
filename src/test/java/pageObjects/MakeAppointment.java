@@ -53,7 +53,9 @@ public class MakeAppointment {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         // Formatea la fecha de hoy según el formato especificado
         String fechaFormateada = formato.format(fechaActual);
-        //meter wait untl field is visible
+        //wait until field is visible
+        new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOfElementLocated(facilitySelect));
+
         driver.findElement(visitDateTxt).sendKeys(fechaFormateada);
 
 
